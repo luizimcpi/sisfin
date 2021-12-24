@@ -1,6 +1,17 @@
 micronaut:
   application:
     name: sisfin
+  security:
+    endpoints:
+      login:
+        enable: true
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:f0f9e301-e97e-4dfb-8925-0c8a3dcb19b1}"'
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/sisfin
