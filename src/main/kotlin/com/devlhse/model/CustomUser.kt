@@ -7,18 +7,23 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.validation.constraints.Email
+import javax.validation.constraints.Size
 
-@Entity(name = "todos")
+@Entity(name = "users")
 @Introspected
-data class Todo(
+data class CustomUser(
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     val id: UUID? = null,
 
     @Column
-    val description: String,
+    @field:Email
+    val email: String,
 
     @Column
-    val done: Boolean
+    @field:Size(min = 8)
+    val password: String
 )
