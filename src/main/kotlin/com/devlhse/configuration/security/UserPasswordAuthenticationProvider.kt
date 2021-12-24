@@ -14,7 +14,8 @@ import reactor.core.publisher.FluxSink
 
 
 @Singleton
-class UserPasswordAuthenticationProvider(private val userRepository: UserRepository): AuthenticationProvider {
+class UserPasswordAuthenticationProvider(private val passwordEncoder: BCryptPasswordEncoderService,
+                                         private val userRepository: UserRepository): AuthenticationProvider {
 
     override fun authenticate(httpRequest: HttpRequest<*>?,
                               authenticationRequest: AuthenticationRequest<*, *>): Publisher<AuthenticationResponse>? {
@@ -24,7 +25,8 @@ class UserPasswordAuthenticationProvider(private val userRepository: UserReposit
         }
 
         return Flux.create({ emitter: FluxSink<AuthenticationResponse> ->
-            if (authenticationRequest.identity == user.email && authenticationRequest.secret == user.password) {
+            if (authenticationRequest.identity == user.email &&
+                passwordEncoder.matches(authenticationRequest.secret as String, user.password)) {
                 emitter.next(AuthenticationResponse.success(authenticationRequest.identity as String))
                 emitter.complete()
             } else {
