@@ -3,6 +3,7 @@ package com.devlhse.model
 import io.micronaut.core.annotation.Introspected
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
@@ -30,6 +31,10 @@ data class Todo(
     @Column
     @CreationTimestamp
     val createdAt: LocalDateTime? = null,
+
+    @Column
+    @UpdateTimestamp
+    val updatedAt: LocalDateTime? = null,
 
     @ManyToOne(fetch = EAGER)
     val user: CustomUser

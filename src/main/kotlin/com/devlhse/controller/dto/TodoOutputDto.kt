@@ -9,5 +9,7 @@ data class TodoOutputDto(
     val description: String,
     val done: Boolean,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    val updatedAt: LocalDateTime
 )
