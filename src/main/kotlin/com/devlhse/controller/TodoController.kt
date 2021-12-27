@@ -1,26 +1,58 @@
 package com.devlhse.controller
 
+import com.devlhse.controller.dto.TodoInputDto
+import com.devlhse.controller.dto.TodoOutputDto
 import com.devlhse.model.Todo
 import com.devlhse.repository.TodoRepository
+import com.devlhse.repository.UserRepository
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
+import io.micronaut.security.authentication.AuthenticationException
+import io.micronaut.security.authentication.AuthenticationFailed
 import io.micronaut.security.rules.SecurityRule
+import org.slf4j.LoggerFactory
 
 @Controller("/todos")
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class TodoController(private val todoRepository: TodoRepository) {
+class TodoController(private val todoRepository: TodoRepository, private val userRepository: UserRepository) {
+
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     @Get
-    fun getTodos(): List<Todo> {
-        return todoRepository.findAll()
+    fun getTodos(authentication: Authentication): List<TodoOutputDto> {
+        val user = userRepository.findByEmail(authentication.name).orElseThrow {
+            throw AuthenticationException(AuthenticationFailed("Usuario não encontrada com e-mail: ${authentication.name} informado."))
+        }
+        return todoRepository.findByUser(user).map{
+            TodoOutputDto(
+                id = it.id!!,
+                description = it.description,
+                done = it.done,
+                createdAt = it.createdAt!!
+            )
+        }
     }
 
     @Post
-    fun addTodo(@Body todo: Todo): HttpResponse<Todo> {
-        return HttpResponse.created(todoRepository.save(todo))
+    fun addTodo(@Body todoInputDto: TodoInputDto, authentication: Authentication): HttpResponse<TodoOutputDto> {
+        val user = userRepository.findByEmail(authentication.name).orElseThrow {
+            throw AuthenticationException(AuthenticationFailed("Usuario não encontrada com e-mail: ${authentication.name} informado."))
+        }
+        log.info("user in todos ${user.email}")
+        val todo = Todo(description = todoInputDto.description, done = todoInputDto.done, user = user)
+        val savedTodo = todoRepository.save(todo)
+        log.info("todo has been saved in todos ${savedTodo.id}")
+        val output = TodoOutputDto(
+            id = savedTodo.id!!,
+            description = savedTodo.description,
+            done = savedTodo.done,
+            createdAt = savedTodo.createdAt!!
+        )
+        return HttpResponse.created(output)
     }
 }
