@@ -68,7 +68,7 @@ class TodoController(private val todoRepository: TodoRepository, private val use
         }
         log.info("user in todos ${user.email}")
 
-        val existingTodo = todoRepository.findById(id).orElseThrow {
+        val existingTodo = todoRepository.findByUserAndId(user, id).orElseThrow {
             throw AuthenticationException(AuthenticationFailed("Todo não encontrada com id: $id informado."))
         }
 

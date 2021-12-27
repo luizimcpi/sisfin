@@ -18,3 +18,9 @@
 
 - [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
 
+## TODO
+
+- Clean arq
+- find by id todo
+- delete by id todo
+- pagination in findall

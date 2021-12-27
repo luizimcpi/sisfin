@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType.EAGER
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
@@ -36,7 +36,7 @@ data class Todo(
     @UpdateTimestamp
     val updatedAt: LocalDateTime? = null,
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     val user: CustomUser
 
 )
