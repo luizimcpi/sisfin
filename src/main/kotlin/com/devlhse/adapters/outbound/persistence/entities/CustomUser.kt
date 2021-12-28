@@ -1,21 +1,18 @@
-package com.devlhse.model
+package com.devlhse.adapters.outbound.persistence.entities
 
 import io.micronaut.core.annotation.Introspected
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
-import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.persistence.ManyToOne
 
-@Entity(name = "todos")
+@Entity(name = "users")
 @Introspected
-data class Todo(
+data class CustomUser(
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -23,20 +20,13 @@ data class Todo(
     val id: UUID? = null,
 
     @Column
-    val description: String,
+    val email: String,
 
     @Column
-    val done: Boolean,
+    val password: String,
 
     @Column
     @CreationTimestamp
     val createdAt: LocalDateTime? = null,
-
-    @Column
-    @UpdateTimestamp
-    val updatedAt: LocalDateTime? = null,
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    val user: CustomUser
 
 )

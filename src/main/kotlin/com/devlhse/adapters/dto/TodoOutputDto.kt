@@ -1,4 +1,4 @@
-package com.devlhse.controller.dto
+package com.devlhse.adapters.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime

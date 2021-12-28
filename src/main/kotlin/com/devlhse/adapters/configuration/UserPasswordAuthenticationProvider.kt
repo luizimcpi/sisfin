@@ -1,5 +1,6 @@
-package com.devlhse.configuration.security
+package com.devlhse.adapters.configuration
 
+import com.devlhse.adapters.configuration.BCryptPasswordEncoderService
 import com.devlhse.repository.UserRepository
 import io.micronaut.http.HttpRequest
 import io.micronaut.security.authentication.AuthenticationException

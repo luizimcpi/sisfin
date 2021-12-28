@@ -1,4 +1,4 @@
-package com.devlhse.configuration.security
+package com.devlhse.adapters.configuration
 
 import jakarta.inject.Singleton
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
