@@ -9,7 +9,7 @@ import io.micronaut.security.rules.SecurityRule
 
 @Controller("/health")
 @Secured(SecurityRule.IS_ANONYMOUS)
-class HealthController {
+class HealthController() {
 
     @Get
     fun getHealthStatus(): HttpResponse<HealthStatusOutputDto> {

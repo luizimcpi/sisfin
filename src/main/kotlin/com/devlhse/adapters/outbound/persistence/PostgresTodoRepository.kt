@@ -28,7 +28,7 @@ class PostgresTodoRepository(private val micronautDataPostgresTodoRepository: Mi
 
     override fun update(todo: Todo): Todo {
         val customUser = CustomUser(id = todo.user.id, email = todo.user.email, password = todo.user.password, createdAt = todo.user.createdAt)
-        val todoEntity = TodoEntity(id = todo.id, description = todo.description, done = todo.done, user = customUser)
+        val todoEntity = TodoEntity(id = todo.id, description = todo.description, done = todo.done, createdAt = todo.createdAt, updatedAt = todo.updatedAt, user = customUser)
         val savedEntity = micronautDataPostgresTodoRepository.update(todoEntity)
         val userOutput = User(id = savedEntity.user.id, email = savedEntity.user.email, password = savedEntity.user.password, createdAt = savedEntity.user.createdAt)
         return Todo(

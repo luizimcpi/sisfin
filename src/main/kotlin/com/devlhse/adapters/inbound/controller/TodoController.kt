@@ -2,9 +2,9 @@ package com.devlhse.adapters.inbound.controller
 
 import com.devlhse.adapters.dto.TodoInputDto
 import com.devlhse.adapters.dto.TodoOutputDto
+import com.devlhse.application.domain.Todo
 import com.devlhse.application.ports.service.TodoServicePort
 import com.devlhse.application.ports.service.UserServicePort
-import com.devlhse.adapters.outbound.persistence.entities.Todo
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -49,6 +49,7 @@ class TodoController(private val todoServicePort: TodoServicePort, private val u
         }
         log.info("user in todos ${user.email}")
         val todo = Todo(description = todoInputDto.description, done = todoInputDto.done, user = user)
+
         val savedTodo = todoServicePort.save(todo)
         log.info("todo has been saved in todos ${savedTodo.id}")
         val output = TodoOutputDto(
@@ -92,7 +93,9 @@ class TodoController(private val todoServicePort: TodoServicePort, private val u
     @Delete("/{id}")
     fun deleteTodo(id: UUID, authentication: Authentication): HttpResponse<TodoOutputDto> {
         log.info("deleting todo with id $id")
-        val user = userServicePort.findByEmail(authentication.name)
+        val user = userServicePort.findByEmail(authentication.name).orElseThrow {
+            throw AuthenticationException(AuthenticationFailed("Usuario não encontrado com e-mail: ${authentication.name} informado."))
+        }
 
         todoServicePort.deleteByUserAndId(user, id)
 
@@ -102,7 +105,9 @@ class TodoController(private val todoServicePort: TodoServicePort, private val u
     @Get("/{id}")
     fun getTodo(id: UUID, authentication: Authentication): HttpResponse<TodoOutputDto> {
         log.info("find todo with id $id")
-        val user = userServicePort.findByEmail(authentication.name)
+        val user = userServicePort.findByEmail(authentication.name).orElseThrow {
+            throw AuthenticationException(AuthenticationFailed("Usuario não encontrado com e-mail: ${authentication.name} informado."))
+        }
 
         val todo = todoServicePort.findByUserAndId(user, id)
 
