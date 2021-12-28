@@ -20,7 +20,5 @@
 
 ## TODO
 
-- Clean arq
-- find by id todo
-- delete by id todo
+- Hex arq
 - pagination in findall

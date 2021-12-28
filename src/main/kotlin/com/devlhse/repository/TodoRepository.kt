@@ -12,4 +12,7 @@ interface TodoRepository: JpaRepository<Todo, UUID>{
     fun findByUser(user: CustomUser): List<Todo>
 
     fun findByUserAndId(user: CustomUser, id: UUID): Optional<Todo>
+
+    fun deleteByUserAndId(user: CustomUser, id: UUID)
+
 }
