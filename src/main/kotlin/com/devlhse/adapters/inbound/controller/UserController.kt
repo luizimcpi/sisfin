@@ -13,8 +13,11 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.AuthenticationException
 import io.micronaut.security.authentication.AuthenticationFailed
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
+import javax.validation.Valid
 
+@Validated
 @Controller("/users")
 @Secured(SecurityRule.IS_ANONYMOUS)
 class UserController(private val userServicePort: UserServicePort, private val passwordEncoder: BCryptPasswordEncoderService) {
@@ -22,7 +25,7 @@ class UserController(private val userServicePort: UserServicePort, private val p
     private val log = LoggerFactory.getLogger(this::class.java)
 
     @Post
-    fun createUser(@Body userInputDto: UserInputDto): HttpResponse<UserOutputDto> {
+    fun createUser(@Body @Valid userInputDto: UserInputDto): HttpResponse<UserOutputDto> {
         log.info("Criando usuario com email: ${userInputDto.email}")
         val user = userServicePort.findByEmail(userInputDto.email)
 

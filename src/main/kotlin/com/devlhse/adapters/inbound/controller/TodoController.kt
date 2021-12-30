@@ -17,9 +17,13 @@ import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.authentication.AuthenticationException
 import io.micronaut.security.authentication.AuthenticationFailed
 import io.micronaut.security.rules.SecurityRule
+import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
 import java.util.UUID
+import javax.validation.Valid
 
+
+@Validated
 @Controller("/todos")
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class TodoController(private val todoServicePort: TodoServicePort, private val userServicePort: UserServicePort) {
@@ -43,7 +47,7 @@ class TodoController(private val todoServicePort: TodoServicePort, private val u
     }
 
     @Post
-    fun addTodo(@Body todoInputDto: TodoInputDto, authentication: Authentication): HttpResponse<TodoOutputDto> {
+    fun addTodo(@Body @Valid todoInputDto: TodoInputDto, authentication: Authentication): HttpResponse<TodoOutputDto> {
         val user = userServicePort.findByEmail(authentication.name).orElseThrow {
             throw AuthenticationException(AuthenticationFailed("Usuario não encontrado com e-mail: ${authentication.name} informado."))
         }
@@ -63,7 +67,7 @@ class TodoController(private val todoServicePort: TodoServicePort, private val u
     }
 
     @Put("/{id}")
-    fun updateTodo(id: UUID, @Body todoInputDto: TodoInputDto, authentication: Authentication): HttpResponse<TodoOutputDto> {
+    fun updateTodo(id: UUID, @Body @Valid todoInputDto: TodoInputDto, authentication: Authentication): HttpResponse<TodoOutputDto> {
         log.info("udpating todo with id $id")
         val user = userServicePort.findByEmail(authentication.name).orElseThrow {
             throw AuthenticationException(AuthenticationFailed("Usuario não encontrado com e-mail: ${authentication.name} informado."))

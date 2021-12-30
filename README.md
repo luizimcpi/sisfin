@@ -20,5 +20,4 @@
 
 ## TODO
 
-- Hex arq
 - pagination in findall
