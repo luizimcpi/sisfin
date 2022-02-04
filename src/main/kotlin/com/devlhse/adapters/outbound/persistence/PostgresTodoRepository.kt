@@ -45,7 +45,7 @@ class PostgresTodoRepository(private val micronautDataPostgresTodoRepository: Mi
         val customUser = CustomUser(id = user.id, email = user.email, password = user.password, createdAt = user.createdAt)
         return micronautDataPostgresTodoRepository.findByUser(customUser).map {
             val user = User(id = it.user.id, email = it.user.email, password = it.user.password, createdAt = it.user.createdAt)
-            Todo(id = it.id, description = it.description, done = it.done, createdAt = it.createdAt, updatedAt = it.createdAt, user = user)
+            Todo(id = it.id, description = it.description, done = it.done, createdAt = it.createdAt, updatedAt = it.updatedAt, user = user)
         }
     }
 
@@ -53,7 +53,7 @@ class PostgresTodoRepository(private val micronautDataPostgresTodoRepository: Mi
         val customUser = CustomUser(id = user.id, email = user.email, password = user.password, createdAt = user.createdAt)
        return micronautDataPostgresTodoRepository.findByUserAndId(customUser, id).map {
            val user = User(id = it.user.id, email = it.user.email, password = it.user.password, createdAt = it.user.createdAt)
-           Todo(id = it.id, description = it.description, done = it.done, createdAt = it.createdAt, updatedAt = it.createdAt, user = user)
+           Todo(id = it.id, description = it.description, done = it.done, createdAt = it.createdAt, updatedAt = it.updatedAt, user = user)
        }
     }
 
